@@ -1,0 +1,426 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import AppLayout from "@/components/AppLayout";
+import BudgetSummaryCard from "@/components/BudgetSummaryCard";
+import AiSavingsCard from "@/components/AiSavingsCard";
+import {
+  MapPin,
+  Calendar,
+  Users,
+  Wallet,
+  Receipt,
+  ArrowLeft,
+  PlusCircle,
+  Sparkles,
+  Plane,
+  Building2,
+  Utensils,
+  Compass,
+  Trash2,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import { getTripById, getExpenses, deleteTrip, addExpense } from "@/lib/store";
+import { trackEvent } from "@/lib/analytics";
+import { generateSavingsRecommendations } from "@/lib/ai-assistant";
+import { Trip, Expense, ExpenseCategory, AiRecommendation } from "@/types";
+import { formatINR, formatDate, calculateDurationDays } from "@/lib/utils";
+
+export default function TripDetailsPage() {
+  const params = useParams();
+  const router = useRouter();
+  const tripId = params.id as string;
+
+  const [trip, setTrip] = useState<Trip | null>(null);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [aiTips, setAiTips] = useState<AiRecommendation[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Quick Add Expense modal / inline
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [expDescription, setExpDescription] = useState("");
+  const [expCategory, setExpCategory] = useState<ExpenseCategory>("Food");
+  const [expAmount, setExpAmount] = useState<number | "">("");
+  const [expDate, setExpDate] = useState(new Date().toISOString().split("T")[0]);
+  const [modalLoading, setModalLoading] = useState(false);
+
+  useEffect(() => {
+    async function load() {
+      if (!tripId) return;
+      const foundTrip = await getTripById(tripId);
+      if (!foundTrip) {
+        setLoading(false);
+        return;
+      }
+      setTrip(foundTrip);
+
+      const tripExpenses = await getExpenses(tripId);
+      setExpenses(tripExpenses);
+
+      const breakdown = {
+        transportation: foundTrip.estimated_transport,
+        accommodation: foundTrip.estimated_accommodation,
+        food: foundTrip.estimated_food,
+        localTransport: foundTrip.estimated_local_transport,
+        activities: foundTrip.estimated_activities,
+        miscellaneous: foundTrip.estimated_miscellaneous,
+        total: foundTrip.estimated_total,
+      };
+      const tips = generateSavingsRecommendations(foundTrip, breakdown);
+      setAiTips(tips);
+
+      await trackEvent("trip_viewed", { tripId, destination: foundTrip.destination });
+      setLoading(false);
+    }
+    load();
+  }, [tripId]);
+
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="w-8 h-8 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (!trip) {
+    return (
+      <AppLayout>
+        <div className="text-center py-16 space-y-4">
+          <AlertCircle className="w-12 h-12 text-slate-400 mx-auto" />
+          <h2 className="text-xl font-bold text-slate-800">Trip Not Found</h2>
+          <p className="text-sm text-slate-500">The requested trip could not be retrieved.</p>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] text-white text-sm font-semibold"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Return to Dashboard</span>
+          </Link>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  const duration = calculateDurationDays(trip.start_date, trip.end_date);
+  const actualSpent = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+  const remainingBudget = trip.max_budget - actualSpent;
+  const isWithinBudget = remainingBudget >= 0;
+  const budgetUtilization = Math.min(Math.round((actualSpent / (trip.max_budget || 1)) * 100), 999);
+
+  const handleQuickAddExpense = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!expDescription || !expAmount || Number(expAmount) <= 0) return;
+
+    setModalLoading(true);
+    const created = await addExpense({
+      trip_id: trip.id,
+      description: expDescription,
+      category: expCategory,
+      amount: Number(expAmount),
+      expense_date: expDate,
+    });
+
+    if (created) {
+      setExpenses([created, ...expenses]);
+      setExpDescription("");
+      setExpAmount("");
+      setShowAddModal(false);
+    }
+    setModalLoading(false);
+  };
+
+  const handleDeleteTrip = async () => {
+    if (confirm("Are you sure you want to delete this trip and all its logged expenses?")) {
+      await deleteTrip(trip.id);
+      router.push("/dashboard");
+    }
+  };
+
+  return (
+    <AppLayout
+      headerTitle={trip.destination}
+      headerSubtitle={`Trip Route: ${trip.origin} → ${trip.destination}`}
+      actions={
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-all"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>Add Expense</span>
+          </button>
+          <Link
+            href={`/trips/${trip.id}/expenses`}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold transition-all"
+          >
+            <Receipt className="w-4 h-4 text-blue-600" />
+            <span>Manage All Expenses</span>
+          </Link>
+          <button
+            onClick={handleDeleteTrip}
+            className="p-2.5 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+            title="Delete Trip"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      }
+    >
+      <div className="space-y-8">
+        {/* Navigation breadcrumb */}
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          <Link href="/dashboard" className="hover:text-[#2563EB] flex items-center gap-1">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Dashboard</span>
+          </Link>
+        </div>
+
+        {/* Top Itinerary Parameters Card */}
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-6">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded">
+              {trip.travel_style} Style
+            </span>
+            <h2 className="text-2xl font-extrabold text-[#0F172A]">{trip.destination}</h2>
+            <p className="text-xs text-slate-500">Starting Point: {trip.origin}</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-6 text-xs text-slate-600">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#2563EB]" />
+              <div>
+                <p className="font-semibold text-slate-900">
+                  {formatDate(trip.start_date)} - {formatDate(trip.end_date)}
+                </p>
+                <p className="text-slate-400">{duration} Days duration</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-[#2563EB]" />
+              <div>
+                <p className="font-semibold text-slate-900">{trip.travelers} Travelers</p>
+                <p className="text-slate-400">Group Size</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Plane className="w-4 h-4 text-[#2563EB]" />
+              <div>
+                <p className="font-semibold text-slate-900">{trip.transport_preference}</p>
+                <p className="text-slate-400">Transit Choice</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Budget Comparison Evaluation */}
+        <BudgetSummaryCard
+          maxBudget={trip.max_budget}
+          estimatedCost={trip.estimated_total}
+          actualSpent={actualSpent}
+        />
+
+        {/* Category Breakdown (Estimated vs Actual spent per category) */}
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <h3 className="text-lg font-bold text-[#0F172A]">Category Breakdown</h3>
+              <p className="text-xs text-slate-500">
+                Itemized estimates vs actual receipts logged
+              </p>
+            </div>
+            <Link
+              href={`/trips/${trip.id}/expenses`}
+              className="text-xs font-semibold text-[#2563EB] hover:underline"
+            >
+              Open Expense Ledger ({expenses.length} items) →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              {
+                title: "Transportation",
+                estimated: trip.estimated_transport,
+                category: "Transportation",
+                pref: trip.transport_preference,
+              },
+              {
+                title: "Accommodation",
+                estimated: trip.estimated_accommodation,
+                category: "Accommodation",
+                pref: trip.accommodation_preference,
+              },
+              {
+                title: "Food & Dining",
+                estimated: trip.estimated_food,
+                category: "Food",
+                pref: trip.food_preference,
+              },
+              {
+                title: "Local Transport",
+                estimated: trip.estimated_local_transport,
+                category: "Local Transport",
+                pref: "Transit",
+              },
+              {
+                title: "Activities & Tours",
+                estimated: trip.estimated_activities,
+                category: "Activities",
+                pref: trip.activity_preference,
+              },
+              {
+                title: "Miscellaneous",
+                estimated: trip.estimated_miscellaneous,
+                category: "Miscellaneous",
+                pref: "Buffer",
+              },
+            ].map((cat) => {
+              const catSpent = expenses
+                .filter((e) => e.category === cat.category)
+                .reduce((sum, e) => sum + Number(e.amount), 0);
+
+              return (
+                <div key={cat.title} className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-semibold text-slate-700">{cat.title}</span>
+                    <span className="text-[10px] text-slate-400 bg-white px-2 py-0.5 rounded border border-slate-200">
+                      {cat.pref}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-baseline pt-1">
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase font-medium">Estimated</p>
+                      <p className="text-base font-bold text-slate-900 font-mono">
+                        {formatINR(cat.estimated)}
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-[10px] text-slate-400 uppercase font-medium">Actual Spent</p>
+                      <p className="text-base font-bold text-[#2563EB] font-mono">
+                        {formatINR(catSpent)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* AI Travel Savings Recommendations */}
+        {aiTips.length > 0 && <AiSavingsCard recommendations={aiTips} />}
+
+        {/* Quick Add Expense Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
+              <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 className="text-base font-bold text-[#0F172A]">Add New Trip Expense</h3>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="text-slate-400 hover:text-slate-600 text-sm font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleQuickAddExpense} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    Description *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Flight ticket, Beach resort room, Seafood dinner"
+                    value={expDescription}
+                    onChange={(e) => setExpDescription(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#2563EB] focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                      Category *
+                    </label>
+                    <select
+                      value={expCategory}
+                      onChange={(e) => setExpCategory(e.target.value as ExpenseCategory)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-[#2563EB] focus:outline-none bg-white"
+                    >
+                      <option value="Transportation">Transportation</option>
+                      <option value="Accommodation">Accommodation</option>
+                      <option value="Food">Food & Dining</option>
+                      <option value="Local Transport">Local Transport</option>
+                      <option value="Activities">Activities</option>
+                      <option value="Shopping">Shopping</option>
+                      <option value="Miscellaneous">Miscellaneous</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                      Amount (₹) *
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      required
+                      placeholder="e.g. 1500"
+                      value={expAmount}
+                      onChange={(e) =>
+                        setExpAmount(e.target.value === "" ? "" : Number(e.target.value))
+                      }
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-[#2563EB] focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    Date *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={expDate}
+                    onChange={(e) => setExpDate(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#2563EB] focus:outline-none"
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={modalLoading}
+                    className="px-4 py-2 text-xs font-semibold bg-[#2563EB] text-white hover:bg-blue-700 rounded-xl shadow-sm"
+                  >
+                    {modalLoading ? "Saving..." : "Record Expense"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    </AppLayout>
+  );
+}
