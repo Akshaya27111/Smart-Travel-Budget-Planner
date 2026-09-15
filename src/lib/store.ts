@@ -206,6 +206,37 @@ export async function saveTrip(tripData: Omit<Trip, "id" | "user_id" | "created_
   return newTrip;
 }
 
+export async function updateTrip(tripId: string, updates: Partial<Trip>): Promise<Trip | null> {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  if (isSupabaseConfigured && supabase) {
+    const { data, error } = await supabase
+      .from("trips")
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq("id", tripId)
+      .select()
+      .single();
+    if (!error && data) {
+      return data as Trip;
+    }
+  }
+
+  // Local fallback
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem(STORAGE_KEYS.TRIPS);
+    const trips: Trip[] = stored ? JSON.parse(stored) : [];
+    const idx = trips.findIndex((t) => t.id === tripId);
+    if (idx !== -1) {
+      trips[idx] = { ...trips[idx], ...updates, updated_at: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEYS.TRIPS, JSON.stringify(trips));
+      return trips[idx];
+    }
+  }
+
+  return null;
+}
+
 export async function deleteTrip(tripId: string): Promise<boolean> {
   const user = await getCurrentUser();
   if (!user) return false;

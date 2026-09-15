@@ -44,14 +44,14 @@ export default function PremiumPage() {
     setMissingVarsMessage(null);
 
     try {
-      await trackEvent("payment_started", { plan: "premium", amount: 199 });
+      await trackEvent("payment_started", { plan: "premium_trial", amount: 1 });
 
       // Step 1: Request Order Creation on the Server
       const res = await fetch("/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan: "premium",
+          plan: "premium_trial",
           allowDemoSandbox: sandboxEnabled,
         }),
       });
@@ -111,7 +111,7 @@ export default function PremiumPage() {
           amount: data.amount,
           currency: data.currency,
           name: "TravelBudget",
-          description: "Premium Plan Upgrade (₹199/month)",
+          description: "Premium 30-Day Trial (₹1, then ₹99/mo autopay)",
           order_id: orderId,
           prefill: {
             name: user?.full_name || "",
@@ -295,10 +295,10 @@ export default function PremiumPage() {
 
               <div className="text-right">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold text-white">₹199</span>
-                  <span className="text-xs text-slate-400">/ month</span>
+                  <span className="text-4xl font-extrabold text-white">₹1</span>
+                  <span className="text-xs text-slate-300">/ first 30 days</span>
                 </div>
-                <p className="text-[10px] text-emerald-400 font-semibold">Taxes included</p>
+                <p className="text-[11px] text-amber-400 font-medium">Then ₹99/mo autopay • Cancel anytime</p>
               </div>
             </div>
 
@@ -306,23 +306,23 @@ export default function PremiumPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-300">
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Unlimited saved trips & histories</span>
+                <span className="text-emerald-300 font-semibold">"Plan It For Me" AI Auto-Itinerary Generator</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Advanced AI recommendations & deep savings tips</span>
+                <span>AI Budget Trade-Off Solver (Auto-balance overspend)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Advanced analytics & conversion funnel telemetry</span>
+                <span>Women's Safety-Aware Routing & Night Travel Alerts</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Detailed expense reports & exports</span>
+                <span>Geographic Location Clustering & Transit Optimizations</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Advanced budget optimization</span>
+                <span>Unlimited saved trips & conversion telemetry</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -334,14 +334,14 @@ export default function PremiumPage() {
             <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Server-verified payment architecture (Razorpay)</span>
+                <span>₹1 30-Day Trial via Razorpay • ₹99/mo autopay • Cancel anytime</span>
               </div>
 
               <button
                 type="button"
                 onClick={handleUpgrade}
                 disabled={upgrading}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-blue-600 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all disabled:opacity-50"
               >
                 {upgrading ? (
                   <>
@@ -351,7 +351,7 @@ export default function PremiumPage() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    <span>Pay ₹199 & Upgrade</span>
+                    <span>Start 30-Day Trial for ₹1</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

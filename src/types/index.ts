@@ -73,6 +73,8 @@ export interface Subscription {
   user_id: string;
   plan: 'free' | 'premium';
   status: 'active' | 'expired' | 'canceled';
+  is_trial?: boolean;
+  renewal_amount?: number;
   payment_reference?: string;
   started_at: string;
   expires_at?: string;
@@ -91,7 +93,10 @@ export type EventName =
   | 'expense_deleted'
   | 'premium_viewed'
   | 'payment_started'
-  | 'payment_completed';
+  | 'payment_completed'
+  | 'places_customized'
+  | 'transport_chain_updated'
+  | 'package_compared';
 
 export interface ProductEvent {
   id: string;
@@ -116,3 +121,191 @@ export interface FunnelMetric {
   count: number;
   conversionRate: number;
 }
+
+// ==========================================
+// "Plan It My Way" & Travel Decision Types
+// ==========================================
+
+export type TripType = 'Solo' | 'Couple' | 'Friends' | 'Family' | 'Group';
+
+export interface PlaceItem {
+  id: string;
+  name: string;
+  category: 'Heritage' | 'Nature' | 'Culture' | 'Shopping' | 'Entertainment' | 'Viewpoint';
+  estimatedCost: number;
+  durationHours: number;
+  rating: number;
+  description: string;
+  isFamous?: boolean;
+  area?: string;
+}
+
+export interface FoodItem {
+  id: string;
+  name: string;
+  estimatedCost: number;
+  mealType: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack / Drink';
+  isFamous?: boolean;
+  description: string;
+}
+
+export interface CityData {
+  cityName: string;
+  state: string;
+  tagline: string;
+  famousPlaces: PlaceItem[];
+  famousFoods: FoodItem[];
+  localExperiences: string[];
+}
+
+export type TransportMode = 'Metro' | 'Bus' | 'Auto' | 'Bike' | 'Cab' | 'Walk';
+
+export interface ModeOption {
+  mode: TransportMode;
+  cost: number;
+  durationMins: number;
+  recommended?: boolean;
+  savingsNote?: string;
+}
+
+export interface TransportHop {
+  id: string;
+  from: string;
+  to: string;
+  distanceKm: number;
+  selectedMode: TransportMode;
+  options: ModeOption[];
+}
+
+export interface TransportChain {
+  hops: TransportHop[];
+  totalCost: number;
+  totalDistanceKm: number;
+  groupAdvice?: string;
+  groupSavings?: number;
+}
+
+export interface TravelPackage {
+  id: string;
+  name: string;
+  tag: string;
+  tripType: TripType;
+  duration: string;
+  totalPrice: number;
+  perPersonPrice?: number;
+  comfortRating: number;
+  highlights: string[];
+  breakdown: {
+    stay: number;
+    food: number;
+    transport: number;
+    activities: number;
+    contingency: number;
+  };
+}
+
+export interface PackageComparison {
+  customPlanCost: number;
+  recommendedPackage: TravelPackage;
+  difference: number;
+  isPackageCheaper: boolean;
+  savingsMessage: string;
+}
+
+// ==========================================
+// 1. Smart Transport Comparison Types
+// ==========================================
+
+export type IntercityTransportMode = 'Flight' | 'Train' | 'Bus';
+
+export interface TransportComparisonOption {
+  mode: IntercityTransportMode;
+  icon: string;
+  name: string;
+  ticketPerPerson: number;
+  totalTicket: number;
+  durationHours: number;
+  baggageCost: number;
+  hotelTransferCost: number;
+  overallCost: number;
+  costPerPerson: number;
+  isBestValue: boolean;
+  savingsComparedToFlight: number;
+  tradeoffSummary: string;
+}
+
+export interface TransportComparisonResult {
+  origin: string;
+  destination: string;
+  travelers: number;
+  options: TransportComparisonOption[];
+  bestValueMode: IntercityTransportMode;
+  maxSavings: number;
+}
+
+// ==========================================
+// 2. "What If?" Budget Optimizer Types
+// ==========================================
+
+export interface OptimizationLever {
+  id: string;
+  category: 'Transportation' | 'Accommodation' | 'Activities' | 'Food';
+  title: string;
+  changeFrom: string;
+  changeTo: string;
+  savings: number;
+  explanation: string;
+  impactLevel: 'High' | 'Medium' | 'Low';
+}
+
+export interface WhatIfPlan {
+  originalCost: number;
+  maxBudget: number;
+  overBudgetAmount: number;
+  levers: OptimizationLever[];
+  totalPotentialSavings: number;
+  combinedOptimizedTotal: number;
+  willBeWithinBudget: boolean;
+}
+
+// ==========================================
+// 3. Safety-Aware Travel Planning Types
+// ==========================================
+
+export interface SafetyAdvisory {
+  id: string;
+  level: 'info' | 'warning' | 'alert';
+  title: string;
+  message: string;
+  suggestedAction: string;
+  estimatedExtraCost?: number;
+  appliesTo: string;
+}
+
+export interface SafetyCheckResult {
+  safetyRating: number;
+  nightTravelFlag: boolean;
+  advisories: SafetyAdvisory[];
+  emergencyContacts: { service: string; number: string }[];
+  safeNeighborhoodTips: string[];
+}
+
+// ==========================================
+// 4. Hidden Cost Detector Types
+// ==========================================
+
+export interface HiddenCostItem {
+  id: string;
+  name: string;
+  category: string;
+  estimatedCost: number;
+  whyNeeded: string;
+  likelihood: 'High' | 'Medium' | 'Low';
+}
+
+export interface HiddenCostAudit {
+  overlookedItems: HiddenCostItem[];
+  totalOverlookedCost: number;
+  auditMessage: string;
+}
+

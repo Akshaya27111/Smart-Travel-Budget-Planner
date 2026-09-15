@@ -78,6 +78,9 @@ export function computeFunnelMetrics(events: ProductEvent[]): FunnelMetric[] {
     premium_viewed: 0,
     payment_started: 0,
     payment_completed: 0,
+    places_customized: 0,
+    transport_chain_updated: 0,
+    package_compared: 0,
   };
 
   events.forEach((ev) => {

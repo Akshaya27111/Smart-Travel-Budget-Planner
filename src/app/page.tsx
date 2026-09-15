@@ -17,6 +17,14 @@ import {
   MapPin,
   Calendar,
   Users,
+  Train,
+  Car,
+  Compass,
+  AlertTriangle,
+  Sliders,
+  ShieldAlert,
+  Heart,
+  Flame,
 } from "lucide-react";
 import { formatINR } from "@/lib/utils";
 
@@ -185,127 +193,211 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* 7 Intelligent Travel Pillars Section */}
       <section id="features" className="py-20 bg-white border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              Core Capabilities
+              7 Intelligent Travel Pillars
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
-              Engineered for Effortless Travel Budgeting
+              One Connected Financial Intelligence System
             </h2>
             <p className="text-slate-600 text-base">
-              Everything you need to predict, optimize, and record actual travel spending without
-              messy spreadsheets.
+              Not random isolated calculators, but a unified decision engine built to guide you from initial daydreaming to final rupee tracking.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Pillar 1: Smart Transport Comparison */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-blue-400 hover:shadow-md transition-all space-y-4">
               <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center font-bold">
-                <Calculator className="w-6 h-6" />
+                <Train className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">1. Smart Budget Planning</h3>
+              <h3 className="text-lg font-bold text-[#0F172A]">1. Smart Transport Comparison</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Transparent estimation algorithms calculate transport, stay, meals, and activities
-                calibrated to travel style and group size.
+                Compare <strong>Flight vs Train vs Bus</strong> beyond ticket prices. Evaluates baggage fees, travel hours, and destination-to-hotel cab transfers to reveal the true <em>Best Value</em>.
               </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
+                  Includes Airport/Station Cabs
+                </span>
+              </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F59E0B] flex items-center justify-center font-bold">
-                <Sparkles className="w-6 h-6" />
+            {/* Pillar 2: Destination Experience & Famous Things */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-amber-400 hover:shadow-md transition-all space-y-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                <Compass className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">2. AI Savings Assistant</h3>
+              <h3 className="text-lg font-bold text-[#0F172A]">2. Destination Experience & Sights</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Contextual cost-cutting recommendations with precise rupee savings calculations and
-                clear explanations why each tip works.
+                Instantly explore famous spots (like Bangalore Palace or Cubbon Park) and iconic delicacies (like Vidyarthi Bhavan Dosa) with 1-click addition directly into your trip budget.
               </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
+                  + Add to Trip with Live Costing
+                </span>
+              </div>
             </div>
 
-            {/* Feature 3 */}
-            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all space-y-4">
+            {/* Pillar 3: Local Transport Chain Calculator */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-emerald-400 hover:shadow-md transition-all space-y-4">
               <div className="w-12 h-12 rounded-xl bg-emerald-100 text-[#16A34A] flex items-center justify-center font-bold">
-                <Receipt className="w-6 h-6" />
+                <Car className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">3. Expense Tracking</h3>
+              <h3 className="text-lg font-bold text-[#0F172A]">3. Local Transit Expense Chain</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Log real-time trip expenses on the fly across 7 categories. Compare planned vs. actual
-                outlay with automatic over-budget alerts.
+                Calculates transit hops: <em>Hotel ➔ Sight A ➔ Sight B ➔ Hotel</em> with group-size intelligence (e.g. 4 travelers = 1 shared cab is cheaper than 2 autos).
               </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
+                  Group Economics: Auto vs Cab
+                </span>
+              </div>
             </div>
 
-            {/* Feature 4 */}
-            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-blue-300 hover:shadow-md transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
-                <BarChart3 className="w-6 h-6" />
+            {/* Pillar 4: Curated Packages Engine */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-rose-400 hover:shadow-md transition-all space-y-4">
+              <div className="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
+                <Heart className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">4. Travel Analytics</h3>
+              <h3 className="text-lg font-bold text-[#0F172A]">4. Weekend & Group Packages</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                In-depth charts, category distributions, budget utilization rates, and product
-                conversion funnel telemetry for evaluation.
+                Curated pre-built itineraries for <strong>Couples, Friends, Families, and Solo</strong> adventurers with realistic budget estimates and must-do activities.
               </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md">
+                  1-Click Package Adoption
+                </span>
+              </div>
+            </div>
+
+            {/* Pillar 5: "What If?" Budget Optimizer */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-indigo-400 hover:shadow-md transition-all space-y-4">
+              <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+                <Sliders className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-[#0F172A]">5. &ldquo;What If?&rdquo; Budget Optimizer</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Trip over budget? Interactive levers let you test trade-offs across transport, hotels, and dining to bring any trip into the green with 1-click rebalancing.
+              </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
+                  Interactive Levers &amp; Instant Fix
+                </span>
+              </div>
+            </div>
+
+            {/* Pillar 6: Safety-Aware Travel Planning */}
+            <div className="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-purple-400 hover:shadow-md transition-all space-y-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                <ShieldAlert className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-[#0F172A]">6. Safety-Aware Travel Intelligence</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Flags late-night transit risks (e.g. 11:30 PM airport arrivals), budgets verified prepaid safe cabs, and provides one-tap access to 112 / 1091 emergency helplines.
+              </p>
+              <div className="pt-2">
+                <span className="text-xs font-semibold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md">
+                  Night Safety &amp; Emergency SOS
+                </span>
+              </div>
+            </div>
+
+            {/* Pillar 7: Hidden Cost Detector (Spans full row on md/lg) */}
+            <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 rounded-2xl p-6 border border-amber-200/80 hover:border-amber-400 hover:shadow-md transition-all md:col-span-2 lg:col-span-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-sm">
+                    <AlertTriangle className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#0F172A]">7. Pre-Trip Hidden Cost Detector</h3>
+                </div>
+                <p className="text-sm text-slate-700 leading-relaxed">
+                  Most budget overruns happen from unbudgeted airport cabs (~₹900), highway tolls (~₹350), excess airline baggage (~₹1,200), and incidental resort tariffs. Our pre-trip audit flags these before you book so you never get caught off-guard.
+                </p>
+              </div>
+              <Link
+                href="/create-trip"
+                className="shrink-0 px-5 py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-bold shadow-sm transition-all"
+              >
+                Try Hidden Cost Audit ➔
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* The Connected Travel Loop: How It Works */}
       <section id="how-it-works" className="py-20 bg-[#F8FAFC] border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              User Journey
+              The Connected Travel Loop
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
-              How TravelBudget Works
+              Plan → Experience → Travel → Calculate → Optimize → Track
             </h2>
             <p className="text-slate-600 text-base">
-              A seamless 5-step workflow designed to keep every rupee accounted for.
+              A 6-stage closed-loop financial system that connects itinerary planning to live rupee tracking.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
             {[
               {
                 step: "1",
-                title: "Create Your Trip",
-                desc: "Enter your starting point, destination, travel dates, and group size.",
+                badge: "Plan",
+                title: "Trip Wizard",
+                desc: "Set origin, destination, dates, travelers, and spending cap.",
               },
               {
                 step: "2",
-                title: "Set Your Budget",
-                desc: "Choose travel style and maximum budget cap to define parameters.",
+                badge: "Experience",
+                title: "Famous Sights",
+                desc: "Discover must-see places & foods with 1-click addition to budget.",
               },
               {
                 step: "3",
-                title: "Get Estimates",
-                desc: "Our engine computes itemized category breakdowns and AI savings tips.",
+                badge: "Travel",
+                title: "Smart Transit",
+                desc: "Flight vs Train vs Bus with station transfers & duration.",
               },
               {
                 step: "4",
-                title: "Track Expenses",
-                desc: "Log meals, transit tickets, hotel bills, and shopping during your journey.",
+                badge: "Calculate",
+                title: "Local Hops",
+                desc: "Route calculation from Hotel to sights with auto vs cab sharing.",
               },
               {
                 step: "5",
-                title: "Stay Within Budget",
-                desc: "Monitor planned vs actual spending with live utilization gauges.",
+                badge: "Optimize",
+                title: "What-If Levers",
+                desc: "Rebalance budgets & eliminate hidden cost traps automatically.",
+              },
+              {
+                step: "6",
+                badge: "Track",
+                title: "Expense Ledger",
+                desc: "Log real spending and monitor planned vs actual variance live.",
               },
             ].map((item) => (
               <div
                 key={item.step}
-                className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs relative flex flex-col justify-between space-y-4"
+                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs relative flex flex-col justify-between space-y-3 hover:border-blue-300 transition-colors"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-full bg-[#2563EB] text-white font-bold flex items-center justify-center text-sm shadow-sm shadow-blue-500/20 mb-3">
-                    {item.step}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="w-8 h-8 rounded-full bg-[#2563EB] text-white font-bold flex items-center justify-center text-xs shadow-xs">
+                      {item.step}
+                    </span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                      {item.badge}
+                    </span>
                   </div>
-                  <h3 className="text-base font-bold text-[#0F172A]">{item.title}</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
+                  <h3 className="text-sm font-bold text-[#0F172A]">{item.title}</h3>
+                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -375,52 +467,51 @@ export default function LandingPage() {
             {/* Premium Plan */}
             <div className="bg-gradient-to-b from-[#0F172A] to-slate-900 text-white rounded-2xl p-8 border border-slate-800 shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden">
               {/* Popular badge */}
-              <div className="absolute top-4 right-4 bg-[#2563EB] text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full shadow-sm">
-                Most Popular
+              <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full shadow-sm">
+                ₹1 Trial Offer
               </div>
 
               <div className="space-y-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
-                  Premium Pro
+                  Full AI Automation
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold text-white">₹199</span>
-                  <span className="text-sm text-slate-400">/ month</span>
+                  <span className="text-4xl font-extrabold text-white">₹1</span>
+                  <span className="text-sm text-slate-300">/ first 30 days</span>
                 </div>
-                <p className="text-sm text-slate-300">
-                  For avid adventurers, group trip leaders, and frequent travelers who demand full
-                  insights.
+                <p className="text-xs text-amber-400 font-medium">
+                  Then ₹99/mo autopay • Cancel anytime with 1 click
                 </p>
 
                 <ul className="space-y-3 text-sm text-slate-300 pt-4 border-t border-slate-800">
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Unlimited saved trips & histories</span>
+                    <span className="text-emerald-300 font-semibold">"Plan It For Me" AI Itinerary Generator</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Advanced AI recommendations & deep savings tips</span>
+                    <span>AI Budget Trade-Off Solver (Over-budget fixer)</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Advanced analytics & conversion funnel telemetry</span>
+                    <span>Women's Safety-Aware Routing & Night alerts</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Exportable PDF/CSV expense breakdown reports</span>
+                    <span>Geographic Clustering (Nearby attraction grouping)</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Priority multi-destination routing</span>
+                    <span>Unlimited trips & exportable PDF/CSV reports</span>
                   </li>
                 </ul>
               </div>
 
               <Link
                 href="/premium"
-                className="w-full text-center py-3 rounded-xl bg-[#2563EB] hover:bg-blue-600 text-white font-semibold text-sm shadow-md shadow-blue-500/30 transition-all"
+                className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-md shadow-blue-500/30 transition-all"
               >
-                Upgrade to Premium
+                Start 30-Day Trial for ₹1
               </Link>
             </div>
           </div>

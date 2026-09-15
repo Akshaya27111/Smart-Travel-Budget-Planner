@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import AppLayout from "@/components/AppLayout";
 import BudgetSummaryCard from "@/components/BudgetSummaryCard";
 import AiSavingsCard from "@/components/AiSavingsCard";
+import SmartTransportComparison from "@/components/SmartTransportComparison";
+import HiddenCostDetector from "@/components/HiddenCostDetector";
 import {
   MapPin,
   Calendar,
@@ -591,6 +593,63 @@ export default function CreateTripPage() {
                 </ul>
               </div>
             </div>
+
+            {/* Smart Intercity Transport Comparison (Flight vs Train vs Bus) */}
+            <SmartTransportComparison
+              origin={origin}
+              destination={destination}
+              travelers={travelers}
+              currentTransport={transportPreference}
+              onApplyTransportCost={(mode, newCost) => {
+                setTransportPreference(mode as TransportPreference);
+                if (calculationResult) {
+                  const newTotal =
+                    newCost +
+                    calculationResult.breakdown.accommodation +
+                    calculationResult.breakdown.food +
+                    calculationResult.breakdown.localTransport +
+                    calculationResult.breakdown.activities +
+                    calculationResult.breakdown.miscellaneous;
+                  setCalculationResult({
+                    ...calculationResult,
+                    breakdown: {
+                      ...calculationResult.breakdown,
+                      transportation: newCost,
+                      total: newTotal,
+                    },
+                    totalEstimated: newTotal,
+                    difference: Math.abs(maxBudget - newTotal),
+                    isWithinBudget: newTotal <= maxBudget,
+                    utilizationPercentage: Math.min(Math.round((newTotal / maxBudget) * 100), 999),
+                  });
+                }
+              }}
+            />
+
+            {/* Hidden Cost Detector Audit */}
+            <HiddenCostDetector
+              travelers={travelers}
+              durationDays={durationDays}
+              transportPreference={transportPreference}
+              onAddHiddenCostBuffer={(additionalBuffer) => {
+                if (calculationResult) {
+                  const newMisc = calculationResult.breakdown.miscellaneous + additionalBuffer;
+                  const newTotal = calculationResult.totalEstimated + additionalBuffer;
+                  setCalculationResult({
+                    ...calculationResult,
+                    breakdown: {
+                      ...calculationResult.breakdown,
+                      miscellaneous: newMisc,
+                      total: newTotal,
+                    },
+                    totalEstimated: newTotal,
+                    difference: Math.abs(maxBudget - newTotal),
+                    isWithinBudget: newTotal <= maxBudget,
+                    utilizationPercentage: Math.min(Math.round((newTotal / maxBudget) * 100), 999),
+                  });
+                }
+              }}
+            />
 
             {/* AI Savings Recommendations Component */}
             {aiRecommendations.length > 0 && (

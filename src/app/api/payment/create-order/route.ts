@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const { plan, allowDemoSandbox } = body;
-    const amountInPaise = 19900; // ₹199 in paise
+    // ₹1 Trial for 30 days in paise, with ₹99/month recurring autopay
+    const amountInPaise = 100; 
 
     // Check if live Razorpay credentials are configured
     if (!keyId || !keySecret) {
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
           amount: amountInPaise,
           currency: "INR",
           keyId: "rzp_test_demo_placeholder",
-          note: "Demo sandbox mode enabled for university project demonstration.",
+          note: "Demo sandbox mode: 30-day trial for ₹1 (renews at ₹99/mo autopay) enabled for university project demonstration.",
         });
       }
 
