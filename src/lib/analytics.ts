@@ -26,6 +26,18 @@ export async function trackEvent(
     } catch (e) {
       console.warn("Could not save event to localStorage", e);
     }
+
+    // Forward custom event to Google Analytics 4 (GA4) if loaded
+    if (typeof (window as any).gtag === "function") {
+      try {
+        (window as any).gtag("event", eventName, {
+          ...metadata,
+          user_id: userId,
+        });
+      } catch (err) {
+        console.warn("Could not dispatch event to Google Analytics", err);
+      }
+    }
   }
 
   // Also push to Supabase events table if configured

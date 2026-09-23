@@ -16,13 +16,20 @@ import {
   RefreshCw,
   PlusCircle,
   ShieldCheck,
+  Users,
+  Globe,
+  Activity,
+  Layers,
 } from "lucide-react";
+import CustomerCohortViewer from "@/components/CustomerCohortViewer";
+import GoogleAnalyticsGuide from "@/components/GoogleAnalyticsGuide";
 import { getTrips, getExpenses } from "@/lib/store";
 import { getLocalEvents, computeFunnelMetrics, trackEvent } from "@/lib/analytics";
 import { Trip, Expense, ProductEvent, FunnelMetric } from "@/types";
 import { formatINR, calculateDurationDays } from "@/lib/utils";
 
 export default function AnalyticsPage() {
+  const [activeTab, setActiveTab] = useState<"cohort" | "funnel" | "ga4">("cohort");
   const [trips, setTrips] = useState<Trip[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [events, setEvents] = useState<ProductEvent[]>([]);
@@ -52,24 +59,6 @@ export default function AnalyticsPage() {
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="w-8 h-8 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
         </div>
-      </AppLayout>
-    );
-  }
-
-  // If new user has no data at all
-  if (trips.length === 0 && expenses.length === 0) {
-    return (
-      <AppLayout
-        headerTitle="Product & Financial Analytics"
-        headerSubtitle="Analyze trip portfolios, spending categories, and product conversion telemetry."
-      >
-        <EmptyState
-          icon={BarChart3}
-          title="No analytics available yet."
-          description="Create your first trip and log expenses to generate comprehensive statistical graphs, category allocations, and product funnel metrics for your viva."
-          actionText="Create Your First Trip"
-          actionHref="/create-trip"
-        />
       </AppLayout>
     );
   }
@@ -182,8 +171,63 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* 8 Primary Product Metrics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Navigation Tabs for MSE Project Review */}
+        <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit text-xs font-bold border border-slate-200">
+          <button
+            onClick={() => setActiveTab("cohort")}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
+              activeTab === "cohort"
+                ? "bg-[#2563EB] text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 bg-white/50 hover:bg-white"
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>35 Customers &amp; Client Collaboration</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("funnel")}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
+              activeTab === "funnel"
+                ? "bg-[#2563EB] text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 bg-white/50 hover:bg-white"
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Financial Graphs &amp; 7-Stage Funnel</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("ga4")}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
+              activeTab === "ga4"
+                ? "bg-[#2563EB] text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 bg-white/50 hover:bg-white"
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Google Analytics (GA4) Behaviour Guide</span>
+          </button>
+        </div>
+
+        {activeTab === "cohort" && <CustomerCohortViewer />}
+
+        {activeTab === "ga4" && <GoogleAnalyticsGuide />}
+
+        {activeTab === "funnel" && (
+          <div className="space-y-8">
+            {trips.length === 0 && expenses.length === 0 ? (
+              <EmptyState
+                icon={BarChart3}
+                title="No custom trips logged yet."
+                description="Click 'Simulate Viva Telemetry' at the top or create a trip to see charts and funnel metrics."
+                actionText="Create Your First Trip"
+                actionHref="/create-trip"
+              />
+            ) : (
+              <>
+                {/* 8 Primary Product Metrics Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Metric 1: Total Trips */}
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs">
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -457,6 +501,10 @@ export default function AnalyticsPage() {
 
         {/* Product Conversion Funnel (Viva Requirement) */}
         <FunnelChart metrics={funnelMetrics} />
+              </>
+            )}
+          </div>
+        )}
       </div>
     </AppLayout>
   );
