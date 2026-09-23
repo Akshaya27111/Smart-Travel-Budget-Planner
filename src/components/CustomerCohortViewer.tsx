@@ -72,7 +72,7 @@ export default function CustomerCohortViewer() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `TravelBudget_35_Customer_Cohort_MSE.csv`);
+    link.setAttribute("download", `TravelBudget_35_Customer_Cohort.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -88,7 +88,7 @@ export default function CustomerCohortViewer() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold">
               <Users className="w-3.5 h-3.5" />
-              <span>MSE Product Analytics Requirement: 35 Verified Customers</span>
+              <span>35 Verified Customers &amp; Client Collaboration</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
               Customer Cohort &amp; Client Collaboration Matrix

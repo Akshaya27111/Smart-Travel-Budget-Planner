@@ -34,7 +34,7 @@ export default function GoogleAnalyticsGuide() {
             How to Monitor &amp; Defend User Behaviour in GA4
           </h2>
           <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-            Our live website is instrumented with <strong>Google Analytics 4 (Measurement ID: G-JN4QBGG2KS)</strong> to capture pageviews, sessions, and custom product interaction events in real-time. Use this guide to explain user behavioral analytics during your MSE review.
+            Our live website is instrumented with <strong>Google Analytics 4 (Measurement ID: G-JN4QBGG2KS)</strong> to capture pageviews, sessions, and custom product interaction events in real-time. Use this guide to explain user behavioral analytics during your project review.
           </p>
           <div className="flex items-center gap-3 mt-3">
             <a href="https://analytics.google.com/analytics/web/provision/#/provision" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white text-xs font-bold transition-colors">
@@ -86,7 +86,7 @@ export default function GoogleAnalyticsGuide() {
       {/* Section 1: The 5 Google Analytics Behaviour Reports */}
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-[#0F172A]">
-          The 5 Google Analytics Behaviour Reports for Your MSE Review
+          The 5 Google Analytics Behaviour Reports for Your Project Review
         </h3>
         <p className="text-xs text-slate-600">
           When your professor asks: <em>&ldquo;Show me how you checked user behaviour in Google Analytics&rdquo;</em>, open <a href="https://analytics.google.com" target="_blank" rel="noreferrer" className="text-blue-600 underline font-semibold">analytics.google.com</a> and walk through these 5 exact reports:

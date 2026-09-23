@@ -154,13 +154,13 @@ export default function AnalyticsPage() {
             </div>
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700">
-                Product Analytics Project Module
+                Smart Travel Budget Planner
               </span>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A]">
-                7th Semester Mechanical Engineering Analytics viva
+                Product Analytics & User Behaviour Dashboard
               </h3>
               <p className="text-xs text-slate-500">
-                Live metrics computed strictly from real Supabase user journeys & event logs
+                Live metrics computed from real Supabase user journeys, event logs & Google Analytics 4
               </p>
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Navigation Tabs for MSE Project Review */}
+        {/* Navigation Tabs */}
         <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit text-xs font-bold border border-slate-200">
           <button
             onClick={() => setActiveTab("cohort")}
