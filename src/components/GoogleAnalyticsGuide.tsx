@@ -34,8 +34,26 @@ export default function GoogleAnalyticsGuide() {
             How to Monitor &amp; Defend User Behaviour in GA4
           </h2>
           <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-            Your live website is instrumented to capture pageviews, sessions, and custom product interaction events in real-time. Use this guide to explain user behavioral analytics during your MSE review.
+            Our live website is instrumented with <strong>Google Analytics 4 (Measurement ID: G-JN4QBGG2KS)</strong> to capture pageviews, sessions, and custom product interaction events in real-time. Use this guide to explain user behavioral analytics during your MSE review.
           </p>
+          <div className="flex items-center gap-3 mt-3">
+            <a href="https://analytics.google.com/analytics/web/provision/#/provision" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white text-xs font-bold transition-colors">
+              <Activity className="w-3.5 h-3.5" />
+              Open Live GA4 Dashboard
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+            <span className="text-xs text-emerald-300 font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Tracking LIVE
+            </span>
+          </div>
+        </div>
+
+        {/* Live GA4 Status Badge */}
+        <div className="flex items-center gap-3 px-4 py-2.5 bg-emerald-500/20 border border-emerald-400/40 rounded-xl w-fit mt-4">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-300 text-xs font-bold">GA4 LIVE — Measurement ID: G-JN4QBGG2KS</span>
+          <a href="https://analytics.google.com/analytics/web/provision/#/provision" target="_blank" rel="noreferrer" className="text-xs text-white underline font-semibold hover:text-emerald-200">Open Dashboard</a>
         </div>
 
         {/* 4 Summary Stats */}
@@ -46,9 +64,9 @@ export default function GoogleAnalyticsGuide() {
             <p className="text-[11px] text-emerald-400 mt-0.5">gtag.js v4 Protocol</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400 font-medium">Captured Events</p>
-            <p className="text-lg md:text-xl font-bold text-emerald-300 mt-1">12 Custom Telemetries</p>
-            <p className="text-[11px] text-slate-300 mt-0.5">Funnel &amp; Feature Events</p>
+            <p className="text-xs text-slate-400 font-medium">Measurement ID</p>
+            <p className="text-lg md:text-xl font-bold text-emerald-300 mt-1">G-JN4QBGG2KS</p>
+            <p className="text-[11px] text-slate-300 mt-0.5">Active &amp; Tracking</p>
           </div>
           <div>
             <p className="text-xs text-slate-400 font-medium">Device Breakdown</p>
@@ -56,9 +74,11 @@ export default function GoogleAnalyticsGuide() {
             <p className="text-[11px] text-slate-300 mt-0.5">High Mobile Usability</p>
           </div>
           <div>
-            <p className="text-xs text-slate-400 font-medium">Avg Session Time</p>
-            <p className="text-lg md:text-xl font-bold text-blue-300 mt-1">4m 18s</p>
-            <p className="text-[11px] text-emerald-400 mt-0.5">+48% vs Industry Benchmark</p>
+            <p className="text-xs text-slate-400 font-medium">Tracking Status</p>
+            <p className="text-lg md:text-xl font-bold text-emerald-300 mt-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Active
+            </p>
+            <p className="text-[11px] text-emerald-400 mt-0.5">Realtime Data Streaming</p>
           </div>
         </div>
       </div>
@@ -183,38 +203,36 @@ export default function GoogleAnalyticsGuide() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-            <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
-              1
+            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[11px]">
+              ✓
             </span>
-            <p className="font-bold text-slate-900">Create Free GA4 Property</p>
+            <p className="font-bold text-slate-900">Step 1: GA4 Property Created</p>
             <p className="text-slate-500 leading-relaxed">
-              Visit <a href="https://analytics.google.com" target="_blank" rel="noreferrer" className="text-blue-600 underline">analytics.google.com</a>, log in with your Gmail, and click <strong>Create Property</strong> named &ldquo;TravelBudget&rdquo;.
+              Property created at <a href="https://analytics.google.com" target="_blank" rel="noreferrer" className="text-blue-600 underline">analytics.google.com</a> with name <strong>&ldquo;Smart Travel Budget Planner&rdquo;</strong>.
             </p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-            <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
-              2
+            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[11px]">
+              ✓
             </span>
-            <p className="font-bold text-slate-900">Create Web Stream</p>
+            <p className="font-bold text-slate-900">Step 2: Web Stream Configured</p>
             <p className="text-slate-500 leading-relaxed">
-              Select <strong>Web</strong> and enter your URL: <br />
+              Web stream created for:<br />
               <code className="text-[11px] font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200">
                 https://smart-travel-budget-planner.vercel.app
-              </code>.<br />
-              Copy your <strong>Measurement ID</strong> (looks like <code>G-XXXXXXXXXX</code>).
+              </code><br />
+              <strong>Measurement ID: <code className="text-emerald-600">G-JN4QBGG2KS</code></strong>
             </p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-            <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[11px]">
-              3
+            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-[11px]">
+              ✓
             </span>
-            <p className="font-bold text-slate-900">Add to Vercel Environment Variables</p>
+            <p className="font-bold text-slate-900">Step 3: Code Deployed via GitHub</p>
             <p className="text-slate-500 leading-relaxed">
-              In Vercel ➔ Project Settings ➔ Environment Variables, add: <br />
-              Key: <code className="text-blue-600 font-mono">NEXT_PUBLIC_GA_MEASUREMENT_ID</code><br />
-              Value: <code>G-XXXXXXXXXX</code>. Click Save &amp; Redeploy!
+              gtag.js code committed to <strong>src/app/layout.tsx</strong> with Measurement ID <code className="text-emerald-600 font-mono">G-JN4QBGG2KS</code>. Vercel auto-deployed the changes. Tracking is <strong>LIVE</strong>.
             </p>
           </div>
         </div>
